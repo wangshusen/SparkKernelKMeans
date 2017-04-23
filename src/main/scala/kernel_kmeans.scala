@@ -26,6 +26,13 @@ object KernelKMeansExample {
         val SKETCH_SIZE: Int = if(args.length > 2) args(2).toInt else TARGET_DIM * 10
         val SIGMA = if(args.length > 3) args(3).toDouble else 8.0
         
+        println("####################################")
+        println("cluster number = " + CLUSTER_NUM.toString)
+        println("target dimension = " + TARGET_DIM.toString)
+        println("sketch size = " + SKETCH_SIZE.toString)
+        println("sigma = " + SIGMA.toString)
+        println("####################################")
+        
         // Path of input and output files
         val DATA_FILE = System.getenv("DATA_FILE")
         val OUTPUT_FILE = System.getenv("OUTPUT_FILE")
@@ -87,6 +94,7 @@ object KernelKMeansExample {
         
         // Record the elapsed time
         val time = new Array[String](3)
+        label_vector_rdd.count
 
         // Extract features by the Nystrom method
         val t0 = System.nanoTime()
@@ -94,6 +102,9 @@ object KernelKMeansExample {
         nystrom_rdd.count
         val t1 = System.nanoTime()
         time(0) = ((t1 - t0) * 1.0E-9).toString
+        println("####################################")
+        println("Nystrom method costs  " + time(0) + "  seconds.")
+        println("####################################")
         
         // Extract s principal components from the Nystrom features
         // The V matrix stored in a local dense matrix
@@ -106,15 +117,21 @@ object KernelKMeansExample {
                 .map(pair => (pair._1, Vectors.dense(pair._2.toArray)))
                 .persist()
         nystrom_pca_rdd.count
-        broadcast_v_mat.destroy()
+        //broadcast_v_mat.destroy()
         val t2 = System.nanoTime()
         time(1) = ((t2 - t1) * 1.0E-9).toString
+        println("####################################")
+        println("PCA costs  " + time(1) + "  seconds.")
+        println("####################################")
 
         // K-means clustering over the extracted features
         val feature_rdd: RDD[Vector] = nystrom_pca_rdd.map(pair => pair._2)
         val clusters = KMeans.train(feature_rdd, k, MAX_ITER)
         val t3 = System.nanoTime()
         time(2) = ((t3 - t2) * 1.0E-9).toString
+        println("####################################")
+        println("K-means clustering costs  " + time(2) + "  seconds.")
+        println("####################################")
         
         // Predict labels
         val broadcast_clusters = sc.broadcast(clusters)

@@ -119,12 +119,14 @@ object KernelKMeansExample {
         nystrom_rdd.count
         val t1 = System.nanoTime()
         time(0) = ((t1 - t0) * 1.0E-9).toString
+        label_vector_rdd.unpersist()
         println("####################################")
         println("Nystrom method costs  " + time(0) + "  seconds.")
         println("####################################")
         
         // Extract s principal components from the Nystrom features
         // The V matrix stored in a local dense matrix
+        val t2 = System.nanoTime()
         val mat: RowMatrix = new RowMatrix(nystrom_rdd.map(pair => pair._2))
         val svd: SingularValueDecomposition[RowMatrix, Matrix] = mat.computeSVD(s, computeU = false)
         val v_mat: Matrix = svd.V.transpose
@@ -135,17 +137,19 @@ object KernelKMeansExample {
                 .persist()
         nystrom_pca_rdd.count
         //broadcast_v_mat.destroy()
-        val t2 = System.nanoTime()
-        time(1) = ((t2 - t1) * 1.0E-9).toString
+        val t3 = System.nanoTime()
+        time(1) = ((t3 - t2) * 1.0E-9).toString
+        nystrom_rdd.unpersist()
         println("####################################")
         println("PCA costs  " + time(1) + "  seconds.")
         println("####################################")
 
         // K-means clustering over the extracted features
+        val t4 = System.nanoTime()
         val feature_rdd: RDD[Vector] = nystrom_pca_rdd.map(pair => pair._2)
         val clusters = KMeans.train(feature_rdd, k, MAX_ITER)
-        val t3 = System.nanoTime()
-        time(2) = ((t3 - t2) * 1.0E-9).toString
+        val t5 = System.nanoTime()
+        time(2) = ((t5 - t4) * 1.0E-9).toString
         println("####################################")
         println("K-means clustering costs  " + time(2) + "  seconds.")
         println("####################################")

@@ -55,8 +55,25 @@ object KernelKMeansExample {
                 .map(pair => (pair(0).toString.toFloat.toInt, Vectors.parse(pair(1).toString).toArray))
                 .persist()
         
+        
+        println("####################################")
+        spark.conf.getAll.foreach(println)
+        println(" ")
+        println("Number of partitions: ")
+        println(label_vector_rdd.getNumPartitions)
+        println(" ")
+        println("getExecutorMemoryStatus:")
+        println(sc.getExecutorMemoryStatus.toString())
+        println(" ")
+        println("sc.getConf.getAll.toString():")
+        sc.getConf.getAll.foreach(println)
+        println("####################################")
+        
+        
         // Perform kernel k-means with Nystrom approximation
         val result: (Array[String], Array[String]) = kernel_kmeans(sc, label_vector_rdd, CLUSTER_NUM, TARGET_DIM, SKETCH_SIZE, SIGMA)
+        
+        
         
         // Write (true label, predicted label) pairs to file OUTPUT_FILE
         val label_str = (result._1 mkString " ").trim
@@ -69,6 +86,8 @@ object KernelKMeansExample {
         val writer2 = new PrintWriter(new File(OUTPUT_FILE_TIME))
         writer2.write(time_str)
         writer2.close()
+        
+        
         
         spark.stop()
     }

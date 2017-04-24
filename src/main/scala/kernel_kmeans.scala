@@ -188,6 +188,9 @@ object KernelKMeansExample {
         nystrom_rdd
     }
     
+    /**
+     * Locally compute the W matrix of Nystrom and its factorization W_{l}^{-1} = U * U^T.
+     */
     def nystrom_w_mat(data_samples: Array[Array[Double]], sigma: Double): DenseMatrix[Double] = {
         val c = data_samples.length
         val l = math.ceil(c * 0.5).toInt
@@ -211,6 +214,9 @@ object KernelKMeansExample {
         u_mat
     }
     
+    /**
+     * Compute the RBF kernel function of two vectors.
+     */
     def rbf(x1: Array[Double], x2: Array[Double], sigma: Double): Double = {
         // squared l2 distance between x1 and x2
         val dist = x1.zip(x2).map(pair => pair._1 - pair._2).map(x => x*x).sum
@@ -218,6 +224,9 @@ object KernelKMeansExample {
         math.exp(- dist / (2 * sigma * sigma))
     }
     
+    /**
+     * Compute the RBF kernel functions of a vector and a collection of vectors.
+     */
     def rbf(x1: Array[Double], x2: Array[Array[Double]], sigma: Double): Array[Double] = {
         val n = x2.length
         val kernel_arr = new Array[Double](n)

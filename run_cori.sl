@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH -p debug
-#SBATCH -N 2
+#SBATCH -p regular
+#SBATCH -N 16
 #SBATCH -C haswell
-#SBATCH -t 00:20:00
+#SBATCH -t 00:10:00
 #SBATCH -J wss_kernel_kmeans
 #SBATCH -L SCRATCH
 #SBATCH -e mysparkjob_%j.err
@@ -20,8 +20,6 @@ start-all.sh
 
 spark-submit \
     --class "KernelKMeansExample" \
-    --driver-memory 2G \
-    --executor-memory 2G \
     --master $SPARKURL \
     $JAR_FILE 10 20 100 8.0
     

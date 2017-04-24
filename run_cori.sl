@@ -23,6 +23,8 @@ spark-submit \
     --num-executors 29 \
     --executor-cores 2 \
     --executor-memory 8G \
-    $JAR_FILE 10 20 100 8.0
+    $JAR_FILE 10 20 100 8.0 
+
+python $PROJ_HOME/result/kmeans_nmi.py -f $OUTPUT_FILE".txt"
 
 stop-all.sh

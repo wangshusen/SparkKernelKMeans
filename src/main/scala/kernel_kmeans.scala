@@ -57,6 +57,7 @@ object KernelKMeansExample {
         
         
         println("####################################")
+        println("spark.conf.getAll:")
         spark.conf.getAll.foreach(println)
         println(" ")
         println("Number of partitions: ")
@@ -64,9 +65,6 @@ object KernelKMeansExample {
         println(" ")
         println("getExecutorMemoryStatus:")
         println(sc.getExecutorMemoryStatus.toString())
-        println(" ")
-        println("sc.getConf.getAll.toString():")
-        sc.getConf.getAll.foreach(println)
         println("####################################")
         
         

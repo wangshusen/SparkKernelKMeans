@@ -20,7 +20,7 @@ start-all.sh
 
 spark-submit \
     --class "KernelKMeansExample" \
-    --master $SPARKURL \
+    -n 256 \
     $JAR_FILE 10 20 100 8.0
     
     

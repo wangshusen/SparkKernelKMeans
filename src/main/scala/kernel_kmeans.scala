@@ -20,7 +20,7 @@ import java.io._
 
 object KernelKMeansExample {
     def main(args: Array[String]) {
-        // Get parameters from command line arguments
+        // Parse parameters from command line arguments
         val CLUSTER_NUM: Int = if(args.length > 0) args(0).toInt else 10
         val TARGET_DIM: Int = if(args.length > 1) args(1).toInt else CLUSTER_NUM * 2
         val SKETCH_SIZE: Int = if(args.length > 2) args(2).toInt else TARGET_DIM * 10
@@ -90,7 +90,7 @@ object KernelKMeansExample {
      */
     def kernel_kmeans(sc: SparkContext, label_vector_rdd: RDD[(Int, Array[Double])], k: Int, s: Int, c: Int, sigma: Double): (Array[String], Array[String]) = {
         // max number of iterations (can be tuned)
-        val MAX_ITER: Int = 20
+        val MAX_ITER: Int = 100
         
         // Record the elapsed time
         val time = new Array[String](3)

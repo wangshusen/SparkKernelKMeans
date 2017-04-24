@@ -24,7 +24,7 @@ object KernelKMeansExample {
         val CLUSTER_NUM: Int = if(args.length > 0) args(0).toInt else 10
         val TARGET_DIM: Int = if(args.length > 1) args(1).toInt else CLUSTER_NUM * 2
         val SKETCH_SIZE: Int = if(args.length > 2) args(2).toInt else TARGET_DIM * 10
-        val SIGMA = if(args.length > 3) args(3).toDouble else 8.0
+        val SIGMA = if(args.length > 3) args(3).toDouble else 10.0
         
         println("####################################")
         println("cluster number = " + CLUSTER_NUM.toString)

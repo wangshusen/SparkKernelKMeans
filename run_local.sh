@@ -9,8 +9,10 @@ export DATA_FILE="$PROJ_HOME/data/mnist"
 export OUTPUT_FILE="$PROJ_HOME/result/kernel_kmeans_result"
 
 $SPARK_HOME/bin/spark-submit \
-  --class "KernelKMeansExample" \
-  --master $MASTER \
-  $JAR_FILE 10 20 100 8.0
+    --class "KernelKMeansExample" \
+    --driver-memory 2G \
+    --executor-memory 2G \
+    --master $MASTER \
+    $JAR_FILE 10 20 100 8.0
   
 python $PROJ_HOME/result/kmeans_nmi.py -f $OUTPUT_FILE".txt"

@@ -71,8 +71,6 @@ object KernelKMeansExample {
         // Perform kernel k-means with Nystrom approximation
         val result: (Array[String], Array[String]) = kernel_kmeans(sc, label_vector_rdd, CLUSTER_NUM, TARGET_DIM, SKETCH_SIZE, SIGMA)
         
-        
-        
         // Write (true label, predicted label) pairs to file OUTPUT_FILE
         val label_str = (result._1 mkString " ").trim
         val writer1 = new PrintWriter(new File(OUTPUT_FILE_LABEL))
@@ -122,6 +120,9 @@ object KernelKMeansExample {
         label_vector_rdd.unpersist()
         println("####################################")
         println("Nystrom method costs  " + time(0) + "  seconds.")
+        println(" ")
+        println("getExecutorMemoryStatus:")
+        println(sc.getExecutorMemoryStatus.toString())
         println("####################################")
         
         // Extract s principal components from the Nystrom features
@@ -142,6 +143,9 @@ object KernelKMeansExample {
         nystrom_rdd.unpersist()
         println("####################################")
         println("PCA costs  " + time(1) + "  seconds.")
+        println(" ")
+        println("getExecutorMemoryStatus:")
+        println(sc.getExecutorMemoryStatus.toString())
         println("####################################")
 
         // K-means clustering over the extracted features
@@ -152,6 +156,9 @@ object KernelKMeansExample {
         time(2) = ((t5 - t4) * 1.0E-9).toString
         println("####################################")
         println("K-means clustering costs  " + time(2) + "  seconds.")
+        println(" ")
+        println("getExecutorMemoryStatus:")
+        println(sc.getExecutorMemoryStatus.toString())
         println("####################################")
         
         // Predict labels

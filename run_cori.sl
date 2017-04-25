@@ -20,8 +20,9 @@ start-all.sh
 
 spark-submit \
     --class "KernelKMeansExample" \
-    --num-executors 29 \
-    --executor-cores 2 \
+    --num-executors 5 \
+    --executor-cores 10 \
+    --driver-cores 10 \
     $JAR_FILE 10 20 100 8.0 
 
 python $PROJ_HOME/result/kmeans_nmi.py -f $OUTPUT_FILE".txt"

@@ -117,7 +117,7 @@ object KernelKMeansExample {
         nystrom_rdd.count
         val t1 = System.nanoTime()
         time(0) = ((t1 - t0) * 1.0E-9).toString
-        label_vector_rdd.unpersist()
+        //label_vector_rdd.unpersist()
         println("####################################")
         println("Nystrom method costs  " + time(0) + "  seconds.")
         println(" ")
@@ -137,10 +137,10 @@ object KernelKMeansExample {
                 .map(pair => (pair._1, Vectors.dense(pair._2.toArray)))
                 .persist()
         nystrom_pca_rdd.count
-        //broadcast_v_mat.destroy()
         val t3 = System.nanoTime()
         time(1) = ((t3 - t2) * 1.0E-9).toString
-        nystrom_rdd.unpersist()
+        //broadcast_v_mat.destroy()
+        //nystrom_rdd.unpersist()
         println("####################################")
         println("PCA costs  " + time(1) + "  seconds.")
         println(" ")

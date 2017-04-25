@@ -8,8 +8,8 @@
 #SBATCH -e mysparkjob_%j.err
 #SBATCH -o mysparkjob_%j.out
 
-PROJ_HOME="$SCRATCH/SparkKernelKMeans"
-JAR_FILE="$PROJ_HOME/target/scala-2.11/kmeans_2.11-1.0.jar"
+export PROJ_HOME="$SCRATCH/SparkKernelKMeans"
+export JAR_FILE="$PROJ_HOME/target/scala-2.11/kmeans_2.11-1.0.jar"
 
 export DATA_FILE="$PROJ_HOME/data/mnist"
 export OUTPUT_FILE="$PROJ_HOME/result/kernel_kmeans_result"
@@ -20,10 +20,8 @@ start-all.sh
 
 spark-submit \
     --class "KernelKMeansExample" \
-    --driver-memory 10G \
-    --num-executors 11 \
-    --executor-cores 5 \
-    --executor-memory 10G \
+    --num-executors 29 \
+    --executor-cores 2 \
     $JAR_FILE 10 20 100 8.0 
 
 python $PROJ_HOME/result/kmeans_nmi.py -f $OUTPUT_FILE".txt"

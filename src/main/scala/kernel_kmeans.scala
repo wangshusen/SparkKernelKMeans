@@ -31,7 +31,6 @@ object KernelKMeansExample {
         println("target dimension = " + TARGET_DIM.toString)
         println("sketch size = " + SKETCH_SIZE.toString)
         println("sigma = " + SIGMA.toString)
-        println("####################################")
         
         // Path of input and output files
         val DATA_FILE = System.getenv("DATA_FILE")
@@ -46,6 +45,7 @@ object KernelKMeansExample {
                       .config("spark.some.config.option", "some-value")
                       .getOrCreate())
         val sc = spark.sparkContext
+        sc.setLogLevel("ERROR")
         
         // Loads data
         val df = spark.read.format("libsvm").load(DATA_FILE)
@@ -54,7 +54,6 @@ object KernelKMeansExample {
         val label_vector_rdd: RDD[(Int, Array[Double])] = df.rdd
                 .map(pair => (pair(0).toString.toFloat.toInt, Vectors.parse(pair(1).toString).toArray))
                 .persist()
-        
         
         println("####################################")
         println("spark.conf.getAll:")
@@ -65,7 +64,6 @@ object KernelKMeansExample {
         println(" ")
         println("getExecutorMemoryStatus:")
         println(sc.getExecutorMemoryStatus.toString())
-        println("####################################")
         
         
         // Perform kernel k-means with Nystrom approximation
@@ -123,7 +121,9 @@ object KernelKMeansExample {
         println(" ")
         println("getExecutorMemoryStatus:")
         println(sc.getExecutorMemoryStatus.toString())
-        println("####################################")
+        println(" ")
+        println("Number of partitions: ")
+        println(nystrom_rdd.getNumPartitions)
         
         // Extract s principal components from the Nystrom features
         // The V matrix stored in a local dense matrix
@@ -146,7 +146,9 @@ object KernelKMeansExample {
         println(" ")
         println("getExecutorMemoryStatus:")
         println(sc.getExecutorMemoryStatus.toString())
-        println("####################################")
+        println(" ")
+        println("Number of partitions: ")
+        println(nystrom_pca_rdd.getNumPartitions)
 
         // K-means clustering over the extracted features
         val t4 = System.nanoTime()
@@ -159,7 +161,6 @@ object KernelKMeansExample {
         println(" ")
         println("getExecutorMemoryStatus:")
         println(sc.getExecutorMemoryStatus.toString())
-        println("####################################")
         
         // Predict labels
         val broadcast_clusters = sc.broadcast(clusters)

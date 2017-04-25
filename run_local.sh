@@ -16,7 +16,7 @@ $SPARK_HOME/bin/spark-submit \
     --executor-memory 700M \
     --master $MASTER \
     $JAR_FILE 10 20 100 10.0 \
-    >> result.out
+    > result.out
   
 python $PROJ_HOME/result/kmeans_nmi.py -f $OUTPUT_FILE".txt" \
     >> result.out

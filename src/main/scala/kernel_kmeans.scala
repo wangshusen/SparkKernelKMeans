@@ -82,7 +82,9 @@ object KernelKMeansExample {
         writer2.write(time_str)
         writer2.close()
         
-        
+        println("####################################")
+        print(time_str)
+        println("####################################")
         
         spark.stop()
     }

@@ -38,6 +38,7 @@ object KernelKMeansExample {
         val OUTPUT_FILE_LABEL = OUTPUT_FILE + ".txt"
         val OUTPUT_FILE_TIME = OUTPUT_FILE + ".time.txt"
         
+        val t_begin = System.nanoTime()
         // Launch Spark
         val spark = (SparkSession
                       .builder()
@@ -70,6 +71,9 @@ object KernelKMeansExample {
         // Perform kernel k-means with Nystrom approximation
         val result: (Array[String], Array[String]) = kernel_kmeans(sc, label_vector_rdd, CLUSTER_NUM, TARGET_DIM, SKETCH_SIZE, SIGMA)
         
+        val t_end = System.nanoTime()
+        val total_time = ((t_end - t_begin) * 1.0E-9).toString
+        
         // Write (true label, predicted label) pairs to file OUTPUT_FILE
         val label_str = (result._1 mkString " ").trim
         val writer1 = new PrintWriter(new File(OUTPUT_FILE_LABEL))
@@ -77,7 +81,7 @@ object KernelKMeansExample {
         writer1.close()
         
         // Write elapsed time (nano seconds) to file OUTPUT_FILE_TILE
-        val time_str = (result._2 mkString " ").trim
+        val time_str = (result._2 mkString " ").trim + " " + total_time
         val writer2 = new PrintWriter(new File(OUTPUT_FILE_TIME))
         writer2.write(time_str)
         writer2.close()

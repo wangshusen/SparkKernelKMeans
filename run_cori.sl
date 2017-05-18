@@ -19,7 +19,7 @@ start-all.sh
 
 spark-submit \
     --class "KernelKMeansExample" \
-    $JAR_FILE 10 20 100 200.0 
+    $JAR_FILE 10 20 400 1840.0 
 
 python $PROJ_HOME/result/kmeans_nmi.py -f $OUTPUT_FILE".txt"
 

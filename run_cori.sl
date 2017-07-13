@@ -15,6 +15,7 @@ export DATA_FILE="$PROJ_HOME/data/mnist8m"
 export OUTPUT_FILE="$PROJ_HOME/result/kernel_kmeans_result_N64"
 module load python/3.5-anaconda
 module load spark
+ulimit -s unlimited
 start-all.sh
 
 spark-submit \
